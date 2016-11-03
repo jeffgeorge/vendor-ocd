@@ -91,3 +91,36 @@ if ($char_result['ErrorCode'] == 1){
 else {
   die("Character Lookup Error");
 }
+
+// some hard-coded stuff, for now.
+$vendors = array(
+  "levante" => "134701236",
+  "holiday" => "459708109"
+);
+
+$kiosks = array(
+  "emblems" => "3301500998",
+  "shaders" => "2420628997",
+  "ships" => "2244880194",
+  "sparrows" => "44395194",
+);
+
+// Lookup Holiday
+$ch = curl_init();
+curl_setopt_array($ch, $default_options);
+curl_setopt_array($ch, array(
+  CURLOPT_URL => BUNGIE_API.$config['platform_id']."/MyAccount/Character/".$char['characterId']."/Vendor/".$vendors['holiday']."/",
+));
+$vendor_result = json_decode(curl_exec($ch), TRUE)["Response"]["data"]["saleItemCategories"][0]["saleItems"];
+curl_close($ch);
+
+echo "Amanda Holiday - Shipwright\n";
+
+foreach ($vendor_result as $vendor_item){
+  $ch = curl_init();
+  curl_setopt_array($ch, $default_options);
+  curl_setopt_array($ch, array(
+    CURLOPT_URL => BUNGIE_API."Manifest/6/".$vendor_item["item"]["itemHash"]."/",
+  ));
+  echo " [ ] " . json_decode(curl_exec($ch), TRUE)["Response"]["data"]["inventoryItem"]["itemName"] . "\n";
+}
