@@ -102,17 +102,21 @@ function do_webauth($method, $username, $password) {
               'KMSI' => 1, // Stay signed in
               'PPFT' => $ppft[1]
             )),
-            CURLOPT_FOLLOWLOCATION => true
           ));
           $auth_result = curl_exec($ch);
           $auth_url = curl_getinfo($ch)['url'];
           curl_close($ch);
 
-          if (strpos($auth_url, $url.'?code') === 0) {
-            return true;
-          }
+          $ch = curl_init();
+          curl_setopt_array($ch, $default_options);
+          curl_setopt_array($ch, array(
+            CURLOPT_URL => $redirect_url,
+            CURLOPT_FOLLOWLOCATION => true
+          ));
+          curl_exec($ch);
+          $result = curl_getinfo($ch);
+          curl_close($ch);
         }
-        return false;
         break;
     }
     $result_url = $result['url'];
