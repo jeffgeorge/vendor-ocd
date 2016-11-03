@@ -58,3 +58,36 @@ $default_options = array(
   ),
 );
 
+// Get user data
+$ch = curl_init();
+curl_setopt_array($ch, $default_options);
+curl_setopt_array($ch, array(
+  CURLOPT_URL => BUNGIE_API."SearchDestinyPlayer/".$config['platform_id']."/".$config['username']."/",
+));
+$user_result = json_decode(curl_exec($ch), TRUE);
+$user_info = curl_getinfo($ch);
+curl_close($ch);
+
+if ($user_result['ErrorCode'] == 1){
+  $user = $user_result['Response'][0];
+}
+else {
+  die("User Lookup Error");
+}
+
+// Get character details
+$ch = curl_init();
+curl_setopt_array($ch, $default_options);
+curl_setopt_array($ch, array(
+  CURLOPT_URL => BUNGIE_API."/".$config['platform_id']."/Account/".$user['membershipId']."/",
+));
+$char_result = json_decode(curl_exec($ch), TRUE);
+curl_close($ch);
+
+if ($char_result['ErrorCode'] == 1){
+  $char = $char_result['Response']['data']['characters'][0]['characterBase'];
+  //var_dump($char['characterId']);
+}
+else {
+  die("Character Lookup Error");
+}
