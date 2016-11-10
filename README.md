@@ -23,6 +23,8 @@ Yeah, it's a pretty non-terrible way to interact with APIs and it's got cURL sup
 ## @TODO
 
 - [x] ~~Import what I've done so far~~
-- [ ] Figure out how to tell if stuff is actually owned or not
-- [ ] Iterate over multiple vendors (Holiday, Levante . . uh . . Eververse maybe?)
+- [x] ~~Figure out how to tell if stuff is actually owned or not~~ (ProTip: You can only see it in Kiosks, and it's in a "unlockStatuses" flag hanging off items)
+- [x] ~~Iterate over multiple vendors (Holiday, Levante . . uh . . Eververse maybe?)~~
+- [ ] Check more vendors? Eververse? Variks?
+- [ ] Add some extra flags for manually flushing login state, etc
 - [ ] idk other stuff
