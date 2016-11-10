@@ -14,7 +14,61 @@ php vendor-ocd.php
 
 ## Example Output
 
-(Once I've got some)
+```
+$ php vendor-ocd.php
+===========================
+Eva Levante - Outfitter
+Next Refresh in 10 hours 32 minutes 10 seconds
+===========================
+Emblems
+ [ ] The Rising Night
+ [ ] Cassoid
+ [ ] Abraxas
+ [ ] Crypto Shift
+ [ ] Mammoth II
+ [ ] Mammoth
+ [ ] Häkke
+ [ ] Suros
+ [ ] Crux/Lomar
+ [ ] Tex Mechanica
+ [ ] Cyclops Mind
+ [$] Sigil of Seven
+ [ ] Blessing of the Gifted
+ [ ] Blessing of the Sentinel
+ [ ] Blessing of the Knight
+ [ ] Blessing of the Ancients
+ [ ] Blessing of IV
+ [ ] Blessing of Worlds
+
+Shaders
+ [ ] Aurora Blur
+ [ ] Thunderdevil
+ [ ] Polar Oak
+ [ ] Broadsword
+ [ ] Classified
+ [ ] 18327496-64703388
+
+
+===========================
+Amanda Holiday - Shipwright
+Next Refresh in 2 days 10 hours 32 minutes 6 seconds
+===========================
+Ship Blueprints
+ [$] Regulus Class 66c
+ [$] Kestrel Class CX0
+ [$] LRv2 Javelin
+ [$] Phaeton Class v2.1
+ [$] Kestrel Class AX
+ [$] Phaeton Class v1
+
+Vehicles
+ [$] S-20 Cavalier
+ [$] S-21 Cavalier
+ [$] S-22 Nomad
+ [$] S-20 Nomad
+ [$] S-21 Seeker
+ [$] S-20 Seeker
+```
 
 ## PHP, seriously?
 
