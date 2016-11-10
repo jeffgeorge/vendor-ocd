@@ -86,7 +86,6 @@ curl_close($ch);
 
 if ($char_result['ErrorCode'] == 1){
   $char = $char_result['Response']['data']['characters'][0]['characterBase'];
-  //var_dump($char['characterId']);
 }
 else {
   die("Character Lookup Error");
@@ -94,8 +93,14 @@ else {
 
 // some hard-coded stuff, for now.
 $vendors = array(
-  "levante" => "134701236",
-  "holiday" => "459708109"
+  "levante" => array(
+    "id" => "134701236",
+    "name" => "Eva Levante - Outfitter",
+  ),
+  "holiday" => array(
+    "id" => "459708109",
+    "name" => "Amanda Holiday - Shipwright",
+  ),
 );
 
 $kiosks = array(
@@ -105,22 +110,71 @@ $kiosks = array(
   "sparrows" => "44395194",
 );
 
-// Lookup Holiday
-$ch = curl_init();
-curl_setopt_array($ch, $default_options);
-curl_setopt_array($ch, array(
-  CURLOPT_URL => BUNGIE_API.$config['platform_id']."/MyAccount/Character/".$char['characterId']."/Vendor/".$vendors['holiday']."/",
-));
-$vendor_result = json_decode(curl_exec($ch), TRUE)["Response"]["data"]["saleItemCategories"][0]["saleItems"];
-curl_close($ch);
+// What categories do we not care about?
+$excluded_categories = array(
+  "Ornaments",
+);
 
-echo "Amanda Holiday - Shipwright\n";
+$needed_items = array();
 
-foreach ($vendor_result as $vendor_item){
+// First, figure out what we own already
+// Note: Terrible.
+foreach ($kiosks as $kiosk){
   $ch = curl_init();
   curl_setopt_array($ch, $default_options);
   curl_setopt_array($ch, array(
-    CURLOPT_URL => BUNGIE_API."Manifest/6/".$vendor_item["item"]["itemHash"]."/",
+    CURLOPT_URL => BUNGIE_API.$config['platform_id']."/MyAccount/Character/".$char['characterId']."/Vendor/".$kiosk."/Metadata/",
   ));
-  echo " [ ] " . json_decode(curl_exec($ch), TRUE)["Response"]["data"]["inventoryItem"]["itemName"] . "\n";
+  
+  $kiosk_result = json_decode(curl_exec($ch), TRUE)["Response"]["data"]["vendor"]["saleItemCategories"];
+  
+  foreach ($kiosk_result as $category){
+    if (!in_array($category["categoryTitle"],$excluded_categories)){
+
+      foreach ($category["saleItems"] as $kiosk_item){
+        if (isset($kiosk_item["unlockStatuses"][0]["isSet"]) && $kiosk_item["unlockStatuses"][0]["isSet"] == false){
+          $needed_items[] = $kiosk_item["item"]["itemHash"];
+        };
+      }
+    }
+  }
+}
+
+// Now, iterate over Vendors to find out what we need to buy
+foreach ($vendors as $vendor){
+  $ch = curl_init();
+  curl_setopt_array($ch, $default_options);
+  curl_setopt_array($ch, array(
+    CURLOPT_URL => BUNGIE_API.$config['platform_id']."/MyAccount/Character/".$char['characterId']."/Vendor/".$vendor['id']."/Metadata/",
+  ));
+
+  $vendor_result = json_decode(curl_exec($ch), TRUE)["Response"]["data"]["vendor"];
+
+  $categories = $vendor_result["saleItemCategories"];
+  curl_close($ch);
+
+  echo "===========================\n";
+  echo $vendor['name'] . "\n";
+  echo "Next Refresh in ". relativeTime(strtotime($vendor_result["nextRefreshDate"])) . "\n";
+  echo "===========================\n";
+  foreach ($categories as $category){
+    if (!in_array($category["categoryTitle"],$excluded_categories)){
+      echo $category["categoryTitle"] . "\n";
+
+      foreach ($category["saleItems"] as $vendor_item){
+        $ch = curl_init();
+        curl_setopt_array($ch, $default_options);
+        curl_setopt_array($ch, array(
+          CURLOPT_URL => BUNGIE_API."Manifest/6/".$vendor_item["item"]["itemHash"]."/",
+        ));
+        
+        $buy = (in_array($vendor_item["item"]["itemHash"],$needed_items)) ? "$":" ";
+        
+        echo " [$buy] " . json_decode(curl_exec($ch), TRUE)["Response"]["data"]["inventoryItem"]["itemName"] . "\n";
+      }
+      
+      echo "\n";
+    }
+  }
+  echo "\n";
 }
