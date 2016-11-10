@@ -15,7 +15,7 @@ $config = array(
   "apikey"          => ""
 );
 
-require "auth.php";
+require "lib.php";
 require "config.php";
 
 $config["platform_id"] = ($config["platform"] == "xbox") ? "1" : "2";
