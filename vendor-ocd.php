@@ -29,7 +29,7 @@ do_webauth($config["platform"],$config["platform_user"],$config["platform_pass"]
 // figure out if we've got bungled & bungleatk cookies
 $csrf = false;
 $atk = false;
-$cookies = explode("\n",file_get_contents("cookies.txt"));
+$cookies = explode("\n",file_get_contents($cookie_file));
 foreach ($cookies as $cookie) {
   $pieces = explode("\t", $cookie);
   if (count($pieces) > 1){
