@@ -22,6 +22,8 @@ if (php_sapi_name() != "cli"){
 require "lib.php";
 require "config.php";
 
+if (!empty($config['cookie_file'])) $cookie_file = $config['cookie_file'];
+
 $config["platform_id"] = ($config["platform"] == "xbox") ? "1" : "2";
 
 do_webauth($config["platform"],$config["platform_user"],$config["platform_pass"]);

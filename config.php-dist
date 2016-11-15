@@ -7,3 +7,4 @@ $config['username'] = '';       // Your *Bungie* username
 $config['platform_user'] = '';  // Your XBL or PSN username (or email, whatever)
 $config['platform_pass'] = '';  // Your XBL or PSN password
 $config['apikey'] = '';         // Your Bungie.net API Key
+$config['cookie_file'] = '';    // Optional, a path to a cookie file
