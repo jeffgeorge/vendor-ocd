@@ -15,6 +15,10 @@ $config = array(
   "apikey"          => ""
 );
 
+if (php_sapi_name() != "cli"){
+  echo "<html><title>Vendor OCD, a Thing for Destiny</title><body style='font-family: sans-serif'><h1>Vendor OCD, a Thing for Destiny</h1><hr />\n";
+}
+
 require "lib.php";
 require "config.php";
 
@@ -153,14 +157,28 @@ foreach ($vendors as $vendor){
   $categories = $vendor_result["saleItemCategories"];
   curl_close($ch);
 
-  echo "===========================\n";
-  echo $vendor['name'] . "\n";
-  echo "Next Refresh in ". relativeTime(strtotime($vendor_result["nextRefreshDate"])) . "\n";
-  echo "===========================\n";
+  if (php_sapi_name() == "cli"){
+    echo "===========================\n";
+    echo $vendor['name'] . "\n";
+    echo "Next Refresh in ". relativeTime(strtotime($vendor_result["nextRefreshDate"])) . "\n";
+    echo "===========================\n";
+  }
+  else {
+    echo "<h2>" . $vendor['name'] . "</h2>\n";
+    echo "<small>Next Refresh in ". relativeTime(strtotime($vendor_result["nextRefreshDate"])) . "</small>\n";
+  }
+
   foreach ($categories as $category){
     if (!in_array($category["categoryTitle"],$excluded_categories)){
-      echo $category["categoryTitle"] . "\n";
+      if (php_sapi_name() == "cli"){
+        echo $category["categoryTitle"] . "\n";
+      }
+      else {
+        echo "<p>" . $category["categoryTitle"] . "</p>\n";
+        echo "<ul>\n";
+      }
 
+      $got_at_least_one = false;
       foreach ($category["saleItems"] as $vendor_item){
         $ch = curl_init();
         curl_setopt_array($ch, $default_options);
@@ -168,13 +186,33 @@ foreach ($vendors as $vendor){
           CURLOPT_URL => BUNGIE_API."Manifest/6/".$vendor_item["item"]["itemHash"]."/",
         ));
         
-        $buy = (in_array($vendor_item["item"]["itemHash"],$needed_items)) ? "$":" ";
-        
-        echo " [$buy] " . json_decode(curl_exec($ch), TRUE)["Response"]["data"]["inventoryItem"]["itemName"] . "\n";
+        //$buy = (in_array($vendor_item["item"]["itemHash"],$needed_items)) ? "$":" ";
+        if (in_array($vendor_item["item"]["itemHash"],$needed_items)) {
+          $got_at_least_one = true;
+          if (php_sapi_name() == "cli"){
+            echo " - " . json_decode(curl_exec($ch), TRUE)["Response"]["data"]["inventoryItem"]["itemName"] . "\n";
+          }
+          else {
+            echo "<li>" . json_decode(curl_exec($ch), TRUE)["Response"]["data"]["inventoryItem"]["itemName"] . "</li>\n";
+          }
+        }
       }
       
-      echo "\n";
+      if (!$got_at_least_one){
+        if (php_sapi_name() == "cli"){
+          echo " - Got 'em all, come back later'\n";
+        }
+        else {
+          echo "<li>Got 'em all, come back later</li>\n";
+        }
+      }
+      
+      echo (php_sapi_name() == "cli") ? "\n":"</ul>\n";
     }
   }
-  echo "\n";
+  echo (php_sapi_name() == "cli") ? "\n":"<hr />";
+}
+
+if (php_sapi_name() != "cli"){
+  echo "\n</body>\n";
 }
