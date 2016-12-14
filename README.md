@@ -24,7 +24,7 @@ Emblems
  - Born of Fire
 
 Shaders
- - Got 'em all, come back later'
+ - Got 'em all, come back later
 
 ===========================
 Amanda Holiday - Shipwright
@@ -56,6 +56,8 @@ Yeah, it's a pretty non-terrible way to interact with APIs and it's got cURL sup
 - [ ] A slightly less crappy web version (stylesheets, render icons from bungo, etc)
 - [ ] Include prices?
 - [ ] Crappy low-fi caching . . maybe?
-- [ ] Check more vendors? Eververse? Variks?
+- [ ] Check More Vendors - Eververse
+- [x] ~~Check More Vendors - Variks~~
+- [x] ~~Check More Vendors - Petra~~
 - [ ] Add some extra flags for manually flushing login state, etc
 - [ ] idk other stuff
