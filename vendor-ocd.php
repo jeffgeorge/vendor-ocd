@@ -202,7 +202,7 @@ foreach ($vendors as $vendor){
       
       if (!$got_at_least_one){
         if (php_sapi_name() == "cli"){
-          echo " - Got 'em all, come back later'\n";
+          echo " - Got 'em all, come back later\n";
         }
         else {
           echo "<li>Got 'em all, come back later</li>\n";
