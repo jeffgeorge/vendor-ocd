@@ -107,6 +107,14 @@ $vendors = array(
     "id" => "459708109",
     "name" => "Amanda Holiday - Shipwright",
   ),
+  "variks" => array(
+    "id" => "1998812735",
+    "name" => "Variks - House of Judgement",
+  ),
+  "petra" => array(
+    "id" => "1410745145",
+    "name" => "Petra Venj - Queen's Wrath",
+  )
 );
 
 $kiosks = array(
@@ -119,6 +127,12 @@ $kiosks = array(
 // What categories do we not care about?
 $excluded_categories = array(
   "Ornaments",
+  "Available Bounties",
+  "SRL Gear",
+  "Challenge of the Elders Entry",
+  "Prison of Elders Bounties",
+  "Consumables",
+  "Queen's Wrath Bounties",
 );
 
 $needed_items = array();
